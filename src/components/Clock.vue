@@ -6,14 +6,14 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue';
-
 import { useTimerStore } from '@/stores/timer';
+import { storeToRefs } from 'pinia';
 
 const Timer = useTimerStore()
 
 const currentTime = ref(new Date());
-const endTime = Timer.endTime
-const remainingTime = ref(endTime ? endTime.getTime() - currentTime.value.getTime() : null);
+const { endTime } = storeToRefs(Timer)
+const remainingTime = ref(endTime.value ? endTime.value.getTime() - currentTime.value.getTime() : null);
 let timerInterval: any
 
 
@@ -22,11 +22,8 @@ const updateTimer = () => {
         return
     }
     currentTime.value = new Date();
-    remainingTime.value = endTime ? endTime.getTime() - currentTime.value.getTime() : null;
+    remainingTime.value = endTime.value ? endTime.value.getTime() - currentTime.value.getTime() : null;
 
-    // if (remainingTime.value ?? 0 <= 0) {
-    //     clearInterval(timerInterval);
-    // }
 };
 
 onMounted(() => {
@@ -42,14 +39,21 @@ const formatTime = (time: number) => {
     const seconds = String(Math.floor((time / 1000) % 60)).padStart(2, '0')
     const milliseconds = String(time % 1000).padStart(3, '0');
     if (time < 0.001) {
-        return "0s"
+        return "00"
     }
+    let timeString: string
     if (time < 60000) {
-        return `${seconds}s ${milliseconds}ms`;
+        timeString = `00:${seconds}`;
+        document.title = `TangoTimer - ${timeString}`
+        return `${seconds}:${milliseconds}`;
     } else if (time < 60 * 60 * 1000) {
-        return `${minutes}m ${seconds}s`;
+        timeString = `${minutes}:${seconds}`;
+        document.title = `TangoTimer - ${timeString}`
+        return timeString
     } else {
-        return `${hours}h ${minutes}m ${seconds}s`;
+        timeString = `${hours}:${minutes}:${seconds}`;;
+        document.title = `TangoTimer - ${timeString}`
+        return timeString
     }
 };
 </script>

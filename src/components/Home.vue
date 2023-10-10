@@ -13,12 +13,12 @@
                     Pause
                 </template>
             </button>
-            <button @click="Timer.restart()">
+            <button @click="restart()">
                 <RestartIcon />
                 Restart
             </button>
 
-            <button @click="Timer.reset()">
+            <button @click="clear()">
                 <StopIcon />
                 Clear
             </button>
@@ -42,6 +42,13 @@ function toggleTimer() {
     Timer.status === 'count' ? Timer.pause() : Timer.start()
 }
 
+function restart() {
+    Timer.init()
+}
+
+function clear() {
+    Timer.clear()
+}
 
 </script>
 
@@ -52,6 +59,8 @@ button {
     font-family: monospace;
     vertical-align: middle;
     border-radius: 10px;
+    border: none;
+    padding: 1rem;
 }
 
 .container {

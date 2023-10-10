@@ -3,6 +3,9 @@ import Home from './components/Home.vue';
 </script>
 
 <template>
+  <!-- <header>
+    <img alt="Tango Timer Logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
+  </header> -->
   <Home />
 </template>
 

@@ -1,4 +1,4 @@
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
 
 export const useTimerStore = defineStore('timer', () => {
@@ -13,29 +13,28 @@ export const useTimerStore = defineStore('timer', () => {
   }
   function start() {
     if (status.value === 'start') {
-      restart()
-      return
+      init()
     }
     status.value = 'count'
   }
   function pause() {
     status.value = 'pause'
   }
-  function reset() {
+  function clear() {
     status.value = 'start'
     endTime.value = null
   }
 
-  function restart() {
-    let timeDelta = (hours.value * 60 * 60 * 1000) + (minutes.value * 60 * 1000) + (seconds.value * 1000)
-    endTime.value = new Date(new Date().getTime() + timeDelta);
-    status.value = 'count'
+  function init() {
+    status.value = 'start'
+    endTime.value = new Date(new Date().getTime() + (hours.value * 60 * 60 * 1000) + (minutes.value * 60 * 1000) + (seconds.value * 1000));
   }
+
   function setClock(hrs: number, mins: number, secs: number) {
     hours.value = hrs
     minutes.value = mins
     seconds.value = secs
-    restart()
+    init()
   }
-  return { endTime, status, hours, minutes, seconds, setTime, start, pause, reset, restart, setClock }
+  return { endTime, status, hours, minutes, seconds, setTime, start, pause, clear, init, setClock }
 })
